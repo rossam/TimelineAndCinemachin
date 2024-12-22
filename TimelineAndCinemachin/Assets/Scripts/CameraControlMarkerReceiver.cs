@@ -12,7 +12,7 @@ public sealed class CameraControlMarkerReceiver : MonoBehaviour, INotificationRe
     private Quaternion  _prevRotation;
     private bool _isReturningRotation;
     private float _rotationLerpTime;
-    CameraControlMarker _cameraControlMarker;
+    private CameraControlMarker _cameraControlMarker;
 
     private void Awake()
     {
@@ -56,12 +56,13 @@ public sealed class CameraControlMarkerReceiver : MonoBehaviour, INotificationRe
     private void StopLookAt()
     {
         var activeCamera = _cinemachineBrain.ActiveVirtualCamera as CinemachineCamera;
-        if (activeCamera == null)
+        if (activeCamera == null || _cameraControlMarker.isReturnRotation == false)
         {
             return;
         }
 
         activeCamera.LookAt = null;
+
         // 補間用のフラグとタイマーをリセット
         _isReturningRotation = true;
         _rotationLerpTime = 0f;
